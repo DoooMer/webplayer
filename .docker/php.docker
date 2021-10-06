@@ -1,0 +1,34 @@
+FROM php:8.0.11-fpm
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        git \
+        zip unzip \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev && apt-get autoremove -y
+RUN install-php-extensions \
+    bcmath \
+    gd \
+    intl \
+    mysqli \
+    pdo_mysql \
+    redis \
+    zip
+    
+    
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+#COPY .docker/php.ini "$PHP_INI_DIR/php.ini"
+
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
+RUN mkdir /app && chown -R www:www /app
+
+USER www
+
+WORKDIR /app
