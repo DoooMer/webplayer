@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Web audio player{% endblock %}
+
+{% block body %}
+    <h1>Web audio player</h1>
+    <audio autoplay controls src="{{ path('download', {name: track}) }}"
+           id="player"></audio>
+    <ul>
+        {% for file in files %}
+            <li>
+                <a href="{{ path('audio', {name: file.path}) }}">{% if file.current %}* {% endif %}{{ file.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <script type="text/javascript">
+        const player = document.getElementById('player');
+
+        player
+            .addEventListener('ended', () => {
+                document.location.href = "{{ path('next', {name: track }) }}";
+            });
+
+        document
+            .addEventListener('keypress', e => {
+
+                if (e.key !== " ") {
+                    return;
+                }
+
+                if (player.paused) {
+                    player.play();
+                } else {
+                    player.pause();
+                }
+
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            });
+    </script>
+{% endblock %}
