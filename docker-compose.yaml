@@ -16,3 +16,9 @@ services:
     image: webplayer/php
     volumes:
       - "./app:/app"
+      - "/home/lev/Музыка:/app/resources/audio:ro"
+    depends_on:
+      - redis
+  redis:
+    image: redis:6.2.6-alpine3.14
+
