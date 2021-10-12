@@ -3,13 +3,14 @@
 {% block title %}Web audio player{% endblock %}
 
 {% block body %}
-    <h1>Web audio player</h1>
-    <audio autoplay controls src="{{ path('download', {name: track}) }}"
+    <h1>{{ track_name }}</h1>
+    <audio autoplay controls src="{{ path('download', {track: play}) }}"
            id="player"></audio>
+    <p>Total: {{ total_tracks }}</p>
     <ul>
-        {% for file in files %}
+        {% for track in tracks %}
             <li>
-                <a href="{{ path('audio', {name: file.path}) }}">{% if file.current %}* {% endif %}{{ file.name }}</a>
+                <a href="{{ path('audio', {track: track.path}) }}">{% if track.current %}>> {% endif %}{{ track.name }}</a>
             </li>
         {% endfor %}
     </ul>
@@ -18,7 +19,7 @@
 
         player
             .addEventListener('ended', () => {
-                document.location.href = "{{ path('next', {name: track }) }}";
+                document.location.href = "{{ path('next', {track: play }) }}";
             });
 
         document

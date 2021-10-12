@@ -6,9 +6,11 @@ class Track
 {
     public bool $current = false;
 
-    public function __construct(public string $name, public string $path)
-    {
+    public string $path;
 
+    public function __construct(public string $name)
+    {
+        $this->path = urlencode($this->name);
     }
 
     public function is(string $name): bool
