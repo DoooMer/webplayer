@@ -1,7 +1,10 @@
 version: "3.0"
 services:
   nginx:
-    image: nginx:1.16-alpine
+    build:
+      context: .
+      dockerfile: .docker/nginx.docker
+    image: doomer/webplayer:1.0-nginx
     ports:
       - "8080:80"
     volumes:
@@ -13,10 +16,14 @@ services:
     build:
       context: .
       dockerfile: .docker/php.docker
-    image: webplayer/php
+    image: doomer/webplayer:1.0-php
+    environment:
+      - APP_ENV=dev
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     volumes:
       - "./app:/app"
-      - "/home/lev/Музыка:/app/resources/audio:ro"
+      - "/home/lev/Музыка:/app/public/audio:ro"
     depends_on:
       - redis
   redis:

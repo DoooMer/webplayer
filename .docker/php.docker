@@ -22,12 +22,14 @@ RUN install-php-extensions \
     
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-#COPY .docker/php.ini "$PHP_INI_DIR/php.ini"
-
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 RUN mkdir /app && chown -R www:www /app
+
+COPY ./app /app
+
+RUN /usr/bin/composer install -d /app --no-dev --no-progress -n -q
 
 USER www
 
